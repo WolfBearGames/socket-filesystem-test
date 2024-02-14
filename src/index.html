@@ -1,0 +1,47 @@
+
+<div>
+  <input type="text" id="filepath" />
+</div>
+<button id="btnload">load file</button>
+<hr />
+<textarea style="height: 200px; width: 400px"></textarea>
+<hr />
+<button id="btnsave">save to file</button>
+<!--
+<div>
+  <h1>Log:</h1>
+  <pre id="log"></pre>
+</div>
+-->
+
+<script type="module">
+  import fs from "socket:fs/promises";
+
+  const textarea = document.querySelector("textarea");
+  const loadbtn = document.querySelector("#btnload");
+  const savebtn = document.querySelector("#btnsave");
+  const log = document.querySelector("#log");
+  const filepath = document.querySelector("#filepath");
+
+  loadbtn.addEventListener("click", async () => {
+    console.log("Load Button clicked");
+    try {
+      console.log("File path is: " + filepath.value);
+      textarea.value = await fs.readFile(filepath.value, "utf-8");
+      console.log(filepath.value + " loaded");
+    } catch (e) {
+      console.log(e.message);
+      console.log(filepath.value + " could not be loaded");
+    }
+  });
+
+  savebtn.addEventListener("click", async () => {
+    console.log("Save Button clicked");
+    if(filepath.value == ''){
+      console.log("path is empty. not saving");
+      return
+    }
+    await fs.writeFile(filepath.value, textarea.value);
+    console.log("text saved to " + filepath.value);
+  });
+</script>
